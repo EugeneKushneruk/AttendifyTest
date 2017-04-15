@@ -1,0 +1,478 @@
+
+// Button mixin constructor. It creates new buttons by using arguments
+
+@mixin BtnConstructor (
+  $color, // Font color argument
+  $borderCol, // Border color argument
+  $background, // Background color argument
+  $hovBackground, // Hover state background color argument
+  $actBackground, // Active state background color argument
+  $hovBorderCol, // Hover state border color argument (can apply color value or "false" argument)
+  $actBorderCol, // Active state border color argument (can apply color value or "false" argument)
+  $txtShadow, // Text shadow (can apply only "true" or "false" argument)
+  $Button3D, // 3D Button (can apply only "true" or "false" argument) !Does not work in combination with inverted buttons!
+  $inverted  // Inverted color button (can apply only "true" or "false" argument) !Does not work in combination with 3D buttons!
+) {
+     @if $inverted == true{
+        color: $background;
+        border-color: $background;
+        background: transparent;
+    }
+    @else {
+        color: $color;
+        border-color: $borderCol;
+        background: $background;
+    }
+    @if $txtShadow == true {
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+    @else {
+        text-shadow: none;
+    }
+    @if $Button3D == true {
+        border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+        @if $inverted == true {
+            background: transparent;
+            @if $hovBorderCol == false {
+                border-color: $hovBackground;
+            }
+            @else {
+                border-color: $hovBorderCol;
+            }
+            @if $Button3D == true {
+                border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            }
+        }
+        @else {
+            background: $hovBackground;
+            @if $hovBorderCol == false {
+                border-color: $hovBackground;
+            }
+            @else {
+                border-color: $hovBorderCol;
+            }
+            @if $Button3D == true {
+                border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+
+    &.active,
+    &:active {
+        @if $inverted == true {
+            background: transparent;
+            @if $actBorderCol == false {
+                border-color: $actBackground;
+            }
+            @else {
+                border-color: $actBorderCol;
+            }
+            @if $Button3D == true {
+                top: 1px;
+                border-bottom: 3px solid transparent;
+            }
+        }
+        @else {
+            background: $actBackground;
+            @if $actBorderCol == false {
+                border-color: $actBackground;
+            }
+            @else {
+                border-color: $actBorderCol;
+            }
+            @if $Button3D == true {
+                top: 1px;
+                border-bottom: 3px solid transparent;
+            }
+        }
+    }
+
+    &.disabled,
+    &[disabled] {
+        @if $inverted == true {
+            color: $background;
+            border-color: $background;
+            background: transparent;
+            box-shadow: none !important;
+            @if $Button3D == true {
+                top: 0;
+            }
+        }
+        @else {
+            color: $color;
+            border-color: $borderCol;
+            background: $background;
+            box-shadow: none !important;
+            @if $Button3D == true {
+                top: 0;
+            }
+        }
+    }
+}
+
+// Main button class
+
+.button {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: 80px;
+    padding: 6px 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    outline: none;
+    background-image: none;
+    font-size: 14px;
+    font-weight: normal;
+
+    &.active,
+    &:active {
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    }
+
+    &.disabled,
+    &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.6;
+        box-shadow: none;
+    }
+}
+
+// Button size & width modifiers
+
+.button_size_xs {
+    min-width: 60px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.5em;
+}
+
+.button_size_sm {
+    min-width: 70px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.5em;
+}
+
+.button_size_lg {
+    min-width: 110px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1.3em;
+}
+
+.button_width_compact {
+    min-width: inherit;
+}
+
+.button_width_block {
+    display: block;
+    width: 100%;
+}
+
+// Button style modifier
+
+.button_style_rounded {
+    border-radius: 35px;
+}
+
+// Button effect modifiers
+
+.button_effect_pulsate {
+    animation: pulsate 1.2s linear infinite;
+    @keyframes pulsate {
+        50% {
+            color: #fff;
+            text-shadow: 0 -1px rgba(0,0,0,.3), 0 0 5px #ffd, 0 0 8px #fff;
+        }
+    }
+
+    &:hover {
+        animation-play-state: paused;
+    }
+
+    &:active {
+        animation-play-state: paused;
+    }
+}
+
+.button_effect_zoom {
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+
+// Creating buttons by button-constructor mixin
+
+.button_type_neutral {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #bdc3c7,
+    $background: #bdc3c7,
+    $hovBackground: #d2d1d1,
+    $actBackground: #bdc3c7,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: false,
+    $inverted: false
+    );
+}
+
+.button_type_neutral-3d {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #bdc3c7,
+    $background: #bdc3c7,
+    $hovBackground: #d2d1d1,
+    $actBackground: #bdc3c7,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: true,
+    $inverted: false
+    );
+}
+
+.button_type_neutral-inverted {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #bdc3c7,
+    $background: #bdc3c7,
+    $hovBackground: #d2d1d1,
+    $actBackground: #bdc3c7,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: true
+    );
+}
+
+.button_type_primary {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #269CE9,
+    $background: #269CE9,
+    $hovBackground: #70B9E8,
+    $actBackground: #269CE9,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: false,
+    $inverted: false
+    );
+}
+
+.button_type_primary-3d {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #269CE9,
+    $background: #269CE9,
+    $hovBackground: #70B9E8,
+    $actBackground: #269CE9,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: true,
+    $inverted: false
+    );
+}
+
+.button_type_primary-inverted {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #269CE9,
+    $background: #269CE9,
+    $hovBackground: #70B9E8,
+    $actBackground: #269CE9,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: true
+    );
+}
+
+.button_type_success {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #57a957,
+    $background: #57a957,
+    $hovBackground: #62c462,
+    $actBackground: #57a957,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: false,
+    $inverted: false
+    );
+}
+
+.button_type_success-3d {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #57a957,
+    $background: #57a957,
+    $hovBackground: #62c462,
+    $actBackground: #57a957,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: true,
+    $inverted: false
+    );
+}
+
+.button_type_success-inverted {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #57a957,
+    $background: #57a957,
+    $hovBackground: #62c462,
+    $actBackground: #57a957,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: true
+    );
+}
+
+.button_type_warning {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #f0ad4e,
+    $background: #f0ad4e,
+    $hovBackground: #ec971f,
+    $actBackground: #f0ad4e,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: false,
+    $inverted: false
+    );
+}
+
+.button_type_warning-3d {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #f0ad4e,
+    $background: #f0ad4e,
+    $hovBackground: #ec971f,
+    $actBackground: #f0ad4e,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: true,
+    $inverted: false
+    );
+}
+
+.button_type_warning-inverted {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #f0ad4e,
+    $background: #f0ad4e,
+    $hovBackground: #ec971f,
+    $actBackground: #f0ad4e,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: true
+    );
+}
+
+.button_type_danger {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #c43c35,
+    $background: #c43c35,
+    $hovBackground: #ee5f5b,
+    $actBackground: #c43c35,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: false,
+    $inverted: false
+    );
+}
+
+.button_type_danger-3d {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #c43c35,
+    $background: #c43c35,
+    $hovBackground: #ee5f5b,
+    $actBackground: #c43c35,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: true,
+    $Button3D: true,
+    $inverted: false
+    );
+}
+
+.button_type_danger-inverted {
+    @include BtnConstructor(
+    $color: #fff,
+    $borderCol: #c43c35,
+    $background: #c43c35,
+    $hovBackground: #ee5f5b,
+    $actBackground: #c43c35,
+    $hovBorderCol: false,
+    $actBorderCol: false,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: true
+    );
+}
+
+.button_type_link {
+    @include BtnConstructor(
+    $color: #337ab7,
+    $borderCol: transparent,
+    $background: transparent,
+    $hovBackground: transparent,
+    $actBackground: transparent,
+    $hovBorderCol: false,
+    $actBorderCol: #a6c8ff,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: false
+    );
+    &:hover {
+        text-decoration: underline;
+        color: #23527c;
+    }
+}
+
+.button_type_text {
+    @include BtnConstructor(
+    $color: #555,
+    $borderCol: transparent,
+    $background: transparent,
+    $hovBackground: transparent,
+    $actBackground: transparent,
+    $hovBorderCol: false,
+    $actBorderCol: #a6c8ff,
+    $txtShadow: false,
+    $Button3D: false,
+    $inverted: false
+    );
+}
